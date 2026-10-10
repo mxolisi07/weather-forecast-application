@@ -1,3 +1,7 @@
+# Figma Design Link
+--> https://www.figma.com/design/fJM1knZb4tmxIYVraZ0T8m/Weather-Forecast-App?m=auto&t=rdidkY0KO9HD7R17-6
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
