@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome, FaSave, FaLock, FaSun, FaMoon,
-  FaCalendarDay, FaClock, FaTint, FaWind, FaEye, FaSearch, FaMapMarkerAlt, FaTrash, FaBars, FaTimes
+  FaCalendarDay, FaClock, FaTint, FaWind, FaEye, FaSearch, FaBars, FaTimes
 } from "react-icons/fa";
-import { useWeather, WeatherProvider } from "../WeatherContext/WeatherContext";
-import DailyPage from "../DailyPage/DailyPage";
-import HourlyPage from "../HourlyPage/HourlyPage";
-import SavedLocPage from "../SavedLocations/SavedLocPage";
-import PrivacyPage from "../PrivacyPage/PrivacyPage";
+import { useWeather } from "../WeatherContext/WeatherContext";
+
 import "./Home.css";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -16,12 +13,11 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 function WeatherLayout() {
   const { data, setData, unit, setUnit, theme, setTheme, savedLocations, setSavedLocations } = useWeather();
   
-  const [view, setView] = useState("daily");
+  const [, setView] = useState("daily");
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch helpers (same as before)
   const fetchForecastByCity = useCallback(async (city: string) => {
     try {
       const res = await fetch(
@@ -73,12 +69,11 @@ function WeatherLayout() {
     }
   }, []);
 
-  // Auto-detect location
   useEffect(() => {
     let didCancel = false;
     async function detect() {
       if (!navigator.geolocation) {
-        await fetchForecastByCity("Johannesburg");
+        await fetchForecastByCity("Kimberley");
         return;
       }
       navigator.geolocation.getCurrentPosition(
@@ -89,9 +84,8 @@ function WeatherLayout() {
         },
         async () => {
           if (didCancel) return;
-          await fetchForecastByCity("Johannesburg");
+          await fetchForecastByCity("Kimberley");
         },
-        { timeout: 8000 }
       );
     }
     detect();
@@ -140,11 +134,7 @@ function WeatherLayout() {
     setSidebarOpen(false);
   }
 
-  function handleLoadSaved(city: string) {
-    fetchForecastByCity(city);
-    navigate("/");
-    setSidebarOpen(false);
-  }
+  
 
   // Close sidebar when route changes or on overlay click
   function closeSidebar() {
@@ -197,7 +187,6 @@ function WeatherLayout() {
     );
   }
 
-  // Build daily summaries
   const dailyMap: Record<string, any[]> = {};
   data.list.forEach((item: { dt: number }) => {
     const date = new Date(item.dt * 1000).toLocaleDateString();
@@ -259,11 +248,10 @@ function WeatherLayout() {
         </header>
 
         <main className="grid-cards">
-          {/* Forecast Card */}
           <section className="card forecast-card" aria-label="5 day forecast">
             <h3>5‑Day Forecast</h3>
             <ul className="forecast-list">
-              {dailySummaries.map(([date, items], i) => {
+              {dailySummaries.map(([, items], i) => {
                 const temps = items.map(f => f.main.temp);
                 const max = Math.max(...temps);
                 const min = Math.min(...temps);
@@ -288,7 +276,6 @@ function WeatherLayout() {
             </ul>
           </section>
 
-          {/* Today Card */}
           <section className="card today-card" aria-label="today summary">
             <h3>Today</h3>
             <div className="today-main">
@@ -322,21 +309,4 @@ function WeatherLayout() {
   );
 }
 
-export default function App() {
-  const [savedLocations, setSavedLocations] = useState(JSON.parse(localStorage.getItem("savedCities") || "[]"));
-  const [data, setData] = useState<any>(null);
-
-  return (
-    <WeatherProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<WeatherLayout />} />
-        <Route path="/daily" element={<DailyPage />} />
-        <Route path="/hourly" element={<HourlyPage />} />
-        <Route path="/saved" element={<SavedLocPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-      </Routes>
-    </Router>
-    </WeatherProvider>
-  );
-}
+export default WeatherLayout

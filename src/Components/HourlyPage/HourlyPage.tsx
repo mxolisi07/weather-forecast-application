@@ -1,5 +1,4 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { useWeather } from "../WeatherContext/WeatherContext";
 

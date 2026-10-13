@@ -1,0 +1,49 @@
+.page3 {
+    padding: 20px;
+}
+
+.card-privacy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.card-privacy-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.card-privacy-card p, .card-privacy-card ul {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.card-privacy-card ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.danger-btn2 {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.danger-btn2:hover {
+  background: #b91c1c;
+}
+
+.grid-cards3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}

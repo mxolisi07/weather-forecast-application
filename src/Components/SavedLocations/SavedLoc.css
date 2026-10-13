@@ -1,13 +1,16 @@
-.saved-card {
+.card-saved-card {
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: flex-start;
+
+  
 }
 
 .saved-actions {
   display: flex;
   gap: 10px;
+  
 }
 
 .saved-actions .primary {
@@ -17,6 +20,7 @@
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
+  
 }
 
 .saved-actions .trash {
@@ -26,4 +30,11 @@
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.grid-cards4 {
+  display: flex;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
 }

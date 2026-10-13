@@ -1,5 +1,4 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaArrowLeft, FaMapMarkerAlt, FaTrash } from "react-icons/fa";
 import { useWeather } from "../WeatherContext/WeatherContext";
 
@@ -15,7 +14,7 @@ export default function SavedLocationsPage() {
       );
       const json = await res.json();
       if (json.cod && json.cod !== "200") throw new Error(json.message || "API error");
-      setData(json); // update forecast in WeatherLayout
+      setData(json); 
       
     } catch (err) {
       console.error("Failed to load city:", err);
@@ -37,9 +36,9 @@ export default function SavedLocationsPage() {
       {savedLocations.length === 0 ? (
         <p>No saved locations yet.</p>
       ) : (
-        <div className="grid-cards2">
+        <div className="grid-cards4">
           {savedLocations.map((city, i) => (
-            <section key={i} className="card saved-card">
+            <section key={i} className="card-saved-card">
               <h3><FaMapMarkerAlt /> {city}</h3>
               <div className="saved-actions">
                 <button className="primary" onClick={() => handleLoad(city)}>Load</button>
