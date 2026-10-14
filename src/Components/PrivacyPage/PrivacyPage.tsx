@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaShieldAlt, FaDatabase, FaLock, FaUserShield } from "react-icons/fa";
 import "./Privacy.css"
+import { useWeather } from "../WeatherContext/WeatherContext";
 
 export default function PrivacyPage() {
+
+  const { setData, setSavedLocations, setUnit, setTheme } = useWeather();
+
+  function handleDeleteData() {
+    
+    localStorage.removeItem("cachedWeather");
+    localStorage.removeItem("savedCities");
+
+    setData(null);
+    setSavedLocations([]);
+    setUnit("C");
+    setTheme("light");
+
+    alert("All cached weather data, saved cities, and preferences have been deleted.");
+  }
+
   return (
     <div className="page3">
       <Link to="/" className="back2"><FaArrowLeft /> Back</Link>
@@ -36,7 +53,7 @@ export default function PrivacyPage() {
         </section>
         
       </div>
-      <button className="danger-btn2">Delete Data</button>
+      <button className="danger-btn2" onClick={handleDeleteData}>Delete Data</button>
     </div>
     
   );

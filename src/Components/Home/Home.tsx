@@ -11,7 +11,7 @@ import "./Home.css";
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 function WeatherLayout() {
-  const { data, setData, unit, setUnit, theme, setTheme, savedLocations, setSavedLocations } = useWeather();
+  const { data, setData, unit, setUnit, theme, setTheme, savedLocations, setSavedLocations, offline } = useWeather();
   
   const [, setView] = useState("daily");
   const [query, setQuery] = useState("");
@@ -50,7 +50,7 @@ function WeatherLayout() {
   const fetchAlerts = useCallback(async (lat: number, lon: number) => {
     try {
       const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily&appid=${API_KEY}`
       );
       const json = await res.json();
       if (json.alerts && json.alerts.length > 0) {
@@ -92,13 +92,12 @@ function WeatherLayout() {
     return () => { didCancel = true; };
   }, [fetchForecastByCity, fetchForecastByCoords]);
 
-  // Persist saved locations
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("savedCities") || "[]");
     if (stored && stored.length && savedLocations.length === 0) {
       setSavedLocations(stored);
     }
-  }, []); // eslint-disable-line
+  }, []); 
 
   useEffect(() => {
     localStorage.setItem("savedCities", JSON.stringify(savedLocations));
@@ -134,9 +133,6 @@ function WeatherLayout() {
     setSidebarOpen(false);
   }
 
-  
-
-  // Close sidebar when route changes or on overlay click
   function closeSidebar() {
     setSidebarOpen(false);
   }
@@ -173,7 +169,7 @@ function WeatherLayout() {
                 <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search city..." />
                 <button type="submit"><FaSearch /></button>
               </form>
-              <button className="icon-btn" onClick={() => setUnit(unit === "C" ? "F" : "C")}>{unit === "C" ? <FaSun /> : <FaMoon />} <span className="btn-label">°{unit}</span></button>
+              <button className="icon-btn" onClick={() => setUnit(unit === "C" ? "F" : "C")}>{unit === "C" } <span className="btn-label">°{unit}</span></button>
               <button className="icon-btn" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? <FaMoon /> : <FaSun />}</button>
               <button className="primary" onClick={handleSave}><FaSave /> Save</button>
             </div>
@@ -215,6 +211,13 @@ function WeatherLayout() {
       {sidebarOpen && <div className="overlay" onClick={closeSidebar} />}
 
       <div className="content">
+
+        {offline && (
+          <div className="offline-banner">
+            Offline mode: showing last saved forecast
+          </div>
+        )}
+
         <header className="topbar">
           <div className="left-header">
             <button className="hamburger" onClick={() => setSidebarOpen(true)} aria-label="Open menu"><FaBars /></button>

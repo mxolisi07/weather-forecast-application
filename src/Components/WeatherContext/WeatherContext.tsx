@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { data } from "react-router-dom";
 
 type WeatherContextType = {
   data: any;
@@ -9,6 +10,7 @@ type WeatherContextType = {
   setTheme: React.Dispatch<React.SetStateAction<string>>;
   savedLocations: any[];
   setSavedLocations: React.Dispatch<React.SetStateAction<any[]>>;
+  offline: boolean;
 };
 
 const WeatherContext = createContext<WeatherContextType | null>(null);
@@ -20,10 +22,51 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
   const [savedLocations, setSavedLocations] = useState<any[]>(
     JSON.parse(localStorage.getItem("savedCities") || "[]")
   );
+  const [offline, setOffline] = useState(!navigator.onLine);
+
+  // Save forecast to localStorage whenever it updates
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("cachedWeather", JSON.stringify({
+        timestamp: Date.now(),
+        forecast: data
+      }));
+    }
+  }, [data]);
+
+  // Listen for online/offline events
+  useEffect(() => {
+    function handleOnline() { setOffline(false); }
+    function handleOffline() { setOffline(true); }
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  // Load cached forecast if offline
+  useEffect(() => {
+    if (offline) {
+      const cached = JSON.parse(localStorage.getItem("cachedWeather") ?? "null");
+      if (cached) {
+        setData(cached.forecast);
+      }
+    }
+  }, [offline]);
 
   return (
     <WeatherContext.Provider
-      value={{ data, setData, unit, setUnit, theme, setTheme, savedLocations, setSavedLocations }}
+      value={{
+        data, setData,
+        unit, setUnit,
+        theme, setTheme,
+        savedLocations, setSavedLocations,
+        offline
+      }}
     >
       {children}
     </WeatherContext.Provider>
