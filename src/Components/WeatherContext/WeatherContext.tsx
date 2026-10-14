@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { data } from "react-router-dom";
 
 type WeatherContextType = {
   data: any;
