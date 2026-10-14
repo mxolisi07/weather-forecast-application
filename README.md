@@ -1,6 +1,8 @@
 # Figma Design Link
 --> https://www.figma.com/design/fJM1knZb4tmxIYVraZ0T8m/Weather-Forecast-App?m=auto&t=rdidkY0KO9HD7R17-6
 
+# Deployment from Vercel
+--> https://weather-forecast-application-e9286pi6m-kingsley25.vercel.app/
 
 # React + TypeScript + Vite
 
