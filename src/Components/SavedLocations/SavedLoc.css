@@ -1,0 +1,40 @@
+.card-saved-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+
+  
+}
+
+.saved-actions {
+  display: flex;
+  gap: 10px;
+  
+}
+
+.saved-actions .primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  
+}
+
+.saved-actions .trash {
+  background: transparent;
+  border: 1px solid #e11d48;
+  color: #e11d48;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.grid-cards4 {
+  display: flex;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
